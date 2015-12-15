@@ -28,6 +28,10 @@
 
 namespace openage {
 
+namespace gui {
+class ContextAdoption;
+}
+
 namespace renderer {
 
 class Font;
@@ -322,6 +326,11 @@ private:
 	 * the currently running game
 	 */
 	std::unique_ptr<GameMain> game;
+
+	/**
+	 * the gui binding
+	 */
+	std::unique_ptr<gui::ContextAdoption> gui;
 
 	/**
 	 * the frame counter measuring fps.

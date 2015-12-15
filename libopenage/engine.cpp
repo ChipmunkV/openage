@@ -25,6 +25,8 @@
 #include "renderer/font/font.h"
 #include "renderer/font/font_manager.h"
 
+#include "gui/context_adoption.h"
+
 /**
  * stores all things that have to do with the game.
  *
@@ -103,6 +105,7 @@ Engine::Engine(util::Dir *data_dir, const char *windowtitle)
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
 	int32_t window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED;
 	this->window = SDL_CreateWindow(
@@ -166,6 +169,8 @@ Engine::Engine(util::Dir *data_dir, const char *windowtitle)
 	glDisable(GL_DEPTH_TEST);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	this->gui = std::make_unique<gui::ContextAdoption>(this->window);
 
 	// initialize job manager with cpucount-2 worker threads
 	int number_of_worker_threads = SDL_GetCPUCount() - 2;
@@ -435,6 +440,9 @@ void Engine::loop() {
 			this->text_renderer->render();
 		}
 		glPopMatrix();
+
+		// TODO: find out what breaks the terrain render
+		this->gui->render();
 
 		util::gl_check_error();
 

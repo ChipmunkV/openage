@@ -37,6 +37,7 @@ add_subdirectory("console")
 add_subdirectory("coord")
 add_subdirectory("crossplatform")
 add_subdirectory("datastructure")
+add_subdirectory("gui")
 add_subdirectory("error")
 add_subdirectory("input")
 add_subdirectory("log")
@@ -156,6 +157,9 @@ target_link_libraries(libopenage
 	${SDL2_LIBRARY}
 	${UTIL_LIB}
 	${HarfBuzz_LIBRARIES}
+	Qt5::Core
+	Qt5::Quick
+	Qt5::Concurrent
 )
 
 if(NOT APPLE)
