@@ -17,6 +17,7 @@
 #include "coord/vec2f.h"
 #include "coord/phys3.h"
 #include "coord/window.h"
+#include "game_singletons_info.h"
 #include "handlers.h"
 #include "options.h"
 #include "job/job_manager.h"
@@ -29,6 +30,10 @@
 #include "screenshot.h"
 
 namespace openage {
+
+namespace gui {
+class GuiBasic;
+}
 
 namespace renderer {
 
@@ -348,6 +353,16 @@ private:
 	 * the currently running game
 	 */
 	std::unique_ptr<GameMain> game;
+
+	/**
+	 * pass engine pointer to gui
+	 */
+	gui::GameSingletonsInfo singletons_info;
+
+	/**
+	 * the gui binding
+	 */
+	std::unique_ptr<gui::GuiBasic> gui;
 
 	/**
 	 * the frame counter measuring fps.
