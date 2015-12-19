@@ -64,6 +64,13 @@ endif()
 set(BUILDSYSTEM_DIR "${CMAKE_SOURCE_DIR}/buildsystem")
 set(CMAKE_MODULE_PATH "${BUILDSYSTEM_DIR}" "${BUILDSYSTEM_DIR}/modules/")
 
+# TODO: why this breaks when moved to the libopenage/CMakeLists.txt?
+set(QT_VERSION_REQ "5.4")
+find_package(Qt5Core ${QT_VERSION_REQ} REQUIRED)
+find_package(Qt5Quick ${QT_VERSION_REQ} REQUIRED)
+# TODO: do not automoc everything
+set(CMAKE_AUTOMOC ON)
+
 include(CheckInSourceBuild)
 include(HandleCXXOptions)
 include(CheckCompilerFeatures)

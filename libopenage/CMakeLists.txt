@@ -153,6 +153,8 @@ target_link_libraries(libopenage
 	${SDL2_LIBRARY}
 	${UTIL_LIB}
 	${HarfBuzz_LIBRARIES}
+	Qt5::Core
+	Qt5::Quick
 )
 
 if(NOT APPLE)
