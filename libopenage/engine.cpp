@@ -80,7 +80,8 @@ Engine::Engine(util::Dir *data_dir, int32_t fps_limit, const char *windowtitle)
 	engine_coord_data{this->get_coord_data()},
 	current_player{this, "current_player", 1},
 	data_dir{data_dir},
-	audio_manager{} {
+	audio_manager{},
+	gui_link{} {
 
 
 	if (fps_limit > 0) {
@@ -571,6 +572,14 @@ void Engine::move_phys_camera(float x, float y, float amount) {
 
 	//update camera phys position
 	this->engine_coord_data->camgame_phys += cam_delta.to_phys3();
+}
+
+void Engine::start_game(std::unique_ptr<GameMain> game) {
+	// TODO: maybe implement a proper 1-to-1 connection
+	ENSURE(game, "linking game to engine problem");
+
+	this->game = std::move(game);
+	this->game->set_parent(this);
 }
 
 } // openage
