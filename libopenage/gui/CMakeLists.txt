@@ -20,6 +20,7 @@ add_sources(libopenage
 	integration/private/gui_game_spec_image_provider_by_id_impl.cpp
 	integration/private/gui_game_spec_image_provider_by_terrain_id_impl.cpp
 	integration/private/gui_game_spec_image_provider_impl.cpp
+	integration/private/gui_image_provider_link.cpp
 	integration/private/gui_log.cpp
 	integration/private/gui_make_standalone_subtexture.cpp
 	integration/private/gui_standalone_subtexture.cpp
