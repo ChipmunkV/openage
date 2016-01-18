@@ -73,5 +73,18 @@ Item {
 			gameSpec: specObj
 			game: gameObj
 		}
+
+		Image {
+			id: gaben
+			sourceSize.width: fontMetrics.averageCharacterWidth * 5
+			source: "image://by-filename/gaben.png"
+			fillMode: Image.PreserveAspectFit
+		}
+	}
+
+	Component.onCompleted: {
+		ImageProviderByFilename.gameSpec = specObj
+		ImageProviderById.gameSpec = specObj
+		ImageProviderByTerrainId.gameSpec = specObj
 	}
 }
