@@ -1,7 +1,18 @@
 add_sources(libopenage
+	integration/public/gui_game_spec_image_provider.cpp
+)
+
+add_sources(libopenage
+	integration/private/gui_filled_texture_handles.cpp
+	integration/private/gui_game_spec_image_provider_by_filename_impl.cpp
+	integration/private/gui_game_spec_image_provider_by_graphic_id_impl.cpp
+	integration/private/gui_game_spec_image_provider_by_id_impl.cpp
+	integration/private/gui_game_spec_image_provider_by_terrain_id_impl.cpp
+	integration/private/gui_game_spec_image_provider_impl.cpp
 	integration/private/gui_make_standalone_subtexture.cpp
 	integration/private/gui_standalone_subtexture.cpp
 	integration/private/gui_texture.cpp
+	integration/private/gui_texture_factory.cpp
 	integration/private/gui_texture_handle.cpp
 )
 
