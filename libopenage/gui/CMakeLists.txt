@@ -1,4 +1,5 @@
 add_sources(libopenage
+	integration/public/gui_application_with_logger.cpp
 	integration/public/gui_game_spec_image_provider.cpp
 )
 
