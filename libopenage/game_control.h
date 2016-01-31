@@ -2,6 +2,10 @@
 
 #pragma once
 
+#include <tuple>
+
+#include <QObject>
+
 #include "coord/camgame.h"
 #include "input/input_context.h"
 #include "rng/rng.h"
@@ -14,11 +18,26 @@
 
 namespace openage {
 
+namespace gui {
+class GuiItemLink;
+} // openage::gui
+
+class GameControl;
+
+class OutputModeSignals : public QObject {
+	Q_OBJECT
+
+public:
+signals:
+	void announced(const std::string &name, const std::vector<std::string>& binds);
+};
+
 /**
  * a target for input handling and gui rendering
  */
 class OutputMode : public input::InputContext {
 public:
+	explicit OutputMode(gui::GuiItemLink *gui_link);
 
 	/**
 	 * is this mode able to be used
@@ -35,6 +54,17 @@ public:
 	 * Used for displaying the current mode.
 	 */
 	virtual std::string name() const = 0;
+
+	virtual void announce();
+
+	virtual void set_game_control(GameControl *game_control);
+
+protected:
+	GameControl *game_control;
+
+public:
+	OutputModeSignals gui_signals;
+	gui::GuiItemLink *gui_link;
 };
 
 /**
@@ -42,20 +72,21 @@ public:
  */
 class CreateMode : public OutputMode {
 public:
-	CreateMode();
+	CreateMode(gui::GuiItemLink *gui_link);
 
 	bool available() const override;
 	void on_enter() override;
 	void render() override;
 	std::string name() const override;
+};
 
-private:
-	int selected;
+class ActionModeSignals : public QObject {
+	Q_OBJECT
 
-	bool setting_value;
-	std::string new_value;
-	std::string response_value;
-
+public:
+signals:
+	void resources_changed(std::tuple<int, int, int, int> resources);
+	void ability_changed(const std::string &ability);
 };
 
 /**
@@ -63,7 +94,7 @@ private:
  */
 class ActionMode : public OutputMode {
 public:
-	ActionMode();
+	ActionMode(gui::GuiItemLink *gui_link);
 
 	bool available() const override;
 	void on_enter() override;
@@ -74,6 +105,7 @@ public:
 	bool on_single_click(int button, coord::window point);
 
 private:
+	virtual void announce() override;
 
 	/**
 	 * decides which type of right mouse click command to issue based on position
@@ -103,6 +135,32 @@ private:
 
 	// used for random type creation
 	rng::RNG rng;
+
+	std::tuple<int, int, int, int> resources;
+
+public:
+	ActionModeSignals gui_signals;
+};
+
+class EditorMode;
+
+class EditorModeSignals : public QObject {
+	Q_OBJECT
+
+public:
+	explicit EditorModeSignals(EditorMode *editor_mode);
+
+public slots:
+	void on_current_player_name_changed();
+
+signals:
+	void toggle();
+	void categories_changed(const std::vector<std::string> &categories);
+	void categories_content_changed();
+	void category_content_changed(const std::string &category_name, std::vector<std::tuple<index_t, uint16_t>> &type_and_texture);
+
+private:
+	EditorMode *editor_mode;
 };
 
 /**
@@ -110,31 +168,60 @@ private:
  */
 class EditorMode : public OutputMode {
 public:
-	EditorMode();
+	explicit EditorMode(gui::GuiItemLink *gui_link);
 
 	bool available() const override;
 	void on_enter() override;
 	void render() override;
 	std::string name() const override;
 
-	bool on_mouse_wheel(int direction, coord::window point);
+	void set_current_type_id(int current_type_id);
+	void set_current_terrain_id(openage::terrain_t current_terrain_id);
+	void set_paint_terrain(bool paint_terrain);
+
 	bool on_single_click(int button, coord::window point);
 
+	void announce_categories();
+	void announce_category_content(const std::string &category_name);
+
 private:
+	virtual void announce() override;
+	virtual void set_game_control(GameControl *game_control) override;
 
 	// currently selected terrain id
 	openage::terrain_t editor_current_terrain;
-	unsigned int editor_current_type;
-	unsigned int editor_category;
-	UnitType *selected_type;
-	Player *selected_owner;
+	int current_type_id;
 	std::string category;
 
 	// true = terrain painting, false = unit placement
 	bool paint_terrain;
 
+public:
+	EditorModeSignals gui_signals;
+
 };
 
+class GameControl;
+
+class GameControlSignals : public QObject {
+	Q_OBJECT
+
+public:
+	explicit GameControlSignals(GameControl *game_control);
+
+public slots:
+	void on_game_running(bool running);
+
+signals:
+	void mode_changed(OutputMode *mode, int mode_index);
+	void modes_changed(OutputMode *mode, int mode_index);
+
+	void current_player_name_changed(const std::string &current_player_name);
+	void current_civ_index_changed(int current_civ_index);
+
+private:
+	GameControl *game_control;
+};
 
 /**
  * connects the gui system with the game engine
@@ -146,21 +233,38 @@ private:
 class GameControl :
 		public openage::HudHandler {
 public:
-	GameControl(openage::Engine *engine);
+	explicit GameControl(gui::GuiItemLink *gui_link);
 
-	void toggle_mode();
+	void set_engine(Engine *engine);
+	void set_game(GameMainHandle *game);
+
+	void set_modes(const std::vector<OutputMode*> &modes);
+
+	void set_mode(int mode);
+	void announce_mode();
+	void announce_current_player_name();
 
 	bool on_drawhud() override;
 
+	Player* get_current_player() const;
+
 private:
+	void do_set_mode(int index);
+
 	Engine *engine;
+	GameMainHandle *game;
 
 	// control modes
-	std::vector<std::unique_ptr<OutputMode>> modes;
+	std::vector<OutputMode*> modes;
 
 	OutputMode *active_mode;
 	int active_mode_index;
 
+	int current_player;
+
+public:
+	GameControlSignals gui_signals;
+	gui::GuiItemLink *gui_link;
 };
 
 } // openage
