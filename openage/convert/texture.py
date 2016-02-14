@@ -90,7 +90,7 @@ class Texture(exportable.Exportable):
     # player-specific colors will be in color blue, but with an alpha of 254
     player_id = 1
 
-    def __init__(self, input_data, palette=None):
+    def __init__(self, input_data, palette=None, custom_cutter=None):
         super().__init__()
         spam("creating Texture from %s" % (repr(input_data)))
 
@@ -104,9 +104,8 @@ class Texture(exportable.Exportable):
                 # (at least a 10x improvement, 50x would be better).
                 # ideas: remove PIL and use libpng via CPPInterface,
                 #        cythonize parts of SLP.py
-                TextureImage(frame.get_picture_data(palette, self.player_id),
-                             hotspot=frame.info.hotspot)
-                for frame in input_data.frames
+                custom_frame for frame in input_data.frames for
+                custom_frame in (custom_cutter or (lambda x: [x]))(TextureImage(frame.get_picture_data(palette, self.player_id), hotspot=frame.info.hotspot))
             ]
         elif isinstance(input_data, BlendingMode):
             frames = [
