@@ -52,7 +52,6 @@ class ResizeHandler;
 class Generator;
 class GameSpec;
 class GameMain;
-class Player;
 
 namespace gui {
 class GuiItemLink;
@@ -226,11 +225,6 @@ public:
 	GameMain *get_game();
 
 	/**
-	 * return the current player or null if no active game
-	 */
-	Player *player_focus() const;
-
-	/**
 	 * return this engine's job manager.
 	 */
 	job::JobManager *get_job_manager();
@@ -303,12 +297,6 @@ public:
 	 * Holds the data for the coord system.
 	 */
 	coord_data* engine_coord_data;
-
-	/**
-	 * Holds the current player color/number
-	 * is a number between 1 and 8
-	 */
-	options::Var<int> current_player;
 
 	/**
 	 * profiler used by the engine
