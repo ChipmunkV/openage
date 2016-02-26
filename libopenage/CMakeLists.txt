@@ -5,6 +5,8 @@
 # add new sources here, dependencies for linking and including
 # are specified below the source file list.
 
+set(CMAKE_AUTOMOC ON)
+
 declare_binary(libopenage)
 
 add_sources(libopenage
@@ -80,6 +82,10 @@ find_package(Opusfile REQUIRED)
 find_package(Epoxy REQUIRED)
 find_package(HarfBuzz REQUIRED)
 
+set(QT_VERSION_REQ "5.4")
+find_package(Qt5Core ${QT_VERSION_REQ} REQUIRED)
+find_package(Qt5Quick ${QT_VERSION_REQ} REQUIRED)
+
 if(WANT_BACKTRACE)
 	find_package(GCCBacktrace)
 endif()
@@ -154,6 +160,9 @@ target_link_libraries(libopenage
 		${SDL2_LIBRARY}
 		${UTIL_LIB}
 		${HarfBuzz_LIBRARIES}
+	PRIVATE
+		Qt5::Core
+		Qt5::Quick
 )
 
 if(NOT APPLE)
