@@ -12,6 +12,7 @@ add_sources(libopenage
 	engine.cpp
 	game_control.cpp
 	game_renderer.cpp
+	gui_basic.cpp
 	handlers.cpp
 	main.cpp
 	options.cpp
