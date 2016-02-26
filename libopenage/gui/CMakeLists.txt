@@ -36,3 +36,7 @@ add_subdirectory("guisys")
 add_sources(libopenage
 	${QT_SDL_SOURCES}
 )
+
+install(DIRECTORY "qml"
+	DESTINATION "${INSTALLED_GLOBAL_ASSET_DIR}"
+)
