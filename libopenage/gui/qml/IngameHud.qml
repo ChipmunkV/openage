@@ -9,6 +9,17 @@ Item {
 
 	property ActionMode actionMode
 	property string playerName
+	property int civIndex
+
+	readonly property int topStripSubid: 0
+	readonly property int leftRectSubid: 1
+	readonly property int rightRectSubid: 2
+	readonly property int resBaseSubid: 3
+
+	readonly property string srcPrefix: "image://by-filename/converted/interface/hud"
+	readonly property string pad: "0000"
+	readonly property string srcSuffix: ".slp.png"
+	property string hudImageSource: srcPrefix + (pad + civIndex).slice(-pad.length) + srcSuffix
 
 	width: 1289
 	height: 960
@@ -22,23 +33,26 @@ Item {
 		property int unit: fontMetrics.averageCharacterWidth
 	}
 
-	Rectangle {
+	Item {
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.top: parent.top
 
 		height: metrics.unit * 1.5 * 2.5
 
-		color: "transparent"
-		border.width: 1
-		border.color: "white"
+		Image {
+			anchors.fill: parent
+			source: hudImageSource + "." + root.topStripSubid
+
+			sourceSize.height: parent.height
+			fillMode: Image.Tile
+		}
 
 		RowLayout {
 			anchors.fill: parent
 			anchors.leftMargin: metrics.unit
 			anchors.rightMargin: metrics.unit
-			anchors.topMargin: metrics.unit * 0.5
-			anchors.bottomMargin: metrics.unit * 0.5
+			anchors.verticalCenter: parent.verticalCenter
 			spacing: metrics.unit * 0.7
 
 			Row {
@@ -51,26 +65,30 @@ Item {
 						width: metrics.unit * 1.5 * 6.5
 						height: metrics.unit * 1.5 * 1.7
 
-						color: "transparent"
-						border.width: 1
-						border.color: "white"
+						color: "#7FFFFFFF"
 
 						Rectangle {
-							width: parent.height
-							height: width
+							anchors.fill: parent
+							anchors.rightMargin: metrics.unit * 0.3
+							anchors.bottomMargin: metrics.unit * 0.3
 
-							color: "transparent"
-							border.width: 1
-							border.color: "white"
-						}
+							color: "black"
 
-						Text {
-							anchors.right: parent.right
-							anchors.rightMargin: metrics.unit / 2
-							anchors.verticalCenter: parent.verticalCenter
-							text: modelData
+							Image {
+								height: parent.height
 
-							color: "white"
+								source: hudImageSource + "." + (root.resBaseSubid + index)
+								fillMode: Image.PreserveAspectFit
+							}
+
+							Text {
+								anchors.right: parent.right
+								anchors.rightMargin: metrics.unit / 2
+								anchors.verticalCenter: parent.verticalCenter
+								text: modelData
+
+								color: "white"
+							}
 						}
 					}
 				}
@@ -115,28 +133,26 @@ Item {
 		border.width: 1
 		border.color: "white"
 
-		Rectangle {
+		Image {
 			anchors.left: parent.left
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 
 			width: height * 1.63
 
-			color: "transparent"
-			border.width: 1
-			border.color: "white"
+			source: hudImageSource + "." + root.leftRectSubid
+			fillMode: Image.Stretch
 		}
 
-		Rectangle {
+		Image {
 			anchors.right: parent.right
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 
 			width: height * 2.01
 
-			color: "transparent"
-			border.width: 1
-			border.color: "white"
+			source: hudImageSource + "." + root.rightRectSubid
+			fillMode: Image.Stretch
 		}
 	}
 }

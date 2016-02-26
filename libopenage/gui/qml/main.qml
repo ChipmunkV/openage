@@ -176,6 +176,7 @@ Item {
 
 						actionMode: actionModeObj
 						playerName: gameControlObj.currentPlayerName
+						civIndex: gameControlObj.currentCivIndex
 					}
 				]
 
