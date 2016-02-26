@@ -1,6 +1,7 @@
 // Copyright 2014-2016 the openage authors. See copying.md for legal info.
 
 #include "../unit/unit_type.h"
+#include "../engine.h"
 #include "game_main.h"
 #include "game_spec.h"
 #include "generator.h"
@@ -54,6 +55,44 @@ Civilisation *GameMain::add_civ(int civ_id) {
 	auto new_civ = std::make_shared<Civilisation>(*this->spec, civ_id);
 	this->civs.emplace_back(new_civ);
 	return new_civ.get();
+}
+
+GameMainHandle::GameMainHandle(gui::GuiItemLink *gui_link)
+	:
+	game{},
+	engine{},
+	gui_link{gui_link} {
+}
+
+void GameMainHandle::set_engine(Engine *engine) {
+	// TODO: decide to either go for a full Engine QML-singleton or for a regular object
+	assert(!this->engine || this->engine == engine);
+	this->engine = engine;
+}
+
+void GameMainHandle::clear() {
+	if (this->engine) {
+		this->game = nullptr;
+		this->engine->end_game();
+		announce_running();
+	}
+}
+
+void GameMainHandle::set_game(std::unique_ptr<GameMain> game) {
+	if (this->engine) {
+		assert(game);
+		this->game = game.get();
+		this->engine->start_game(std::move(game));
+		announce_running();
+	}
+}
+
+bool GameMainHandle::is_game_running() const {
+	return this->game;
+}
+
+void GameMainHandle::announce_running() {
+	emit this->gui_signals.game_running(this->game);
 }
 
 } // openage
