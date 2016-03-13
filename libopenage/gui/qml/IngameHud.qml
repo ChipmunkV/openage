@@ -190,9 +190,7 @@ Item {
 				fillMode: Image.Tile
 			}
 
-			Item {
-				id: midRect
-
+			Paper {
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 			}
