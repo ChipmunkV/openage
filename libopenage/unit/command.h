@@ -7,9 +7,10 @@
 #include "../coord/phys3.h"
 #include "ability.h"
 #include "producer.h"
-#include "unit.h"
 
 namespace openage {
+
+class Unit;
 
 /**
  * additional flags which may affect some abilities
