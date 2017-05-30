@@ -7,6 +7,8 @@
 
 #include <QGuiApplication>
 
+#include "gui_event_dispatcher.h"
+
 namespace qtsdl {
 
 /**
@@ -32,6 +34,7 @@ private:
 	const std::thread::id owner;
 #endif
 
+	EventDispatcher event_dispatcher;
 	QGuiApplication app;
 
 	static std::weak_ptr<GuiApplicationImpl> instance;

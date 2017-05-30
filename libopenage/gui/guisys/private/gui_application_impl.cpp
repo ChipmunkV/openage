@@ -40,7 +40,8 @@ GuiApplicationImpl::GuiApplicationImpl()
 #ifndef NDEBUG
 	owner{std::this_thread::get_id()},
 #endif
-	app{argc, &argv}
+	event_dispatcher{},
+	app{(QCoreApplication::setEventDispatcher(&this->event_dispatcher), argc), &argv}
 {
 	// Set locale back to POSIX for the decimal point parsing (see qcoreapplication.html#locale-settings).
 	std::locale::global(std::locale().combine<std::numpunct<char>>(std::locale::classic()));
