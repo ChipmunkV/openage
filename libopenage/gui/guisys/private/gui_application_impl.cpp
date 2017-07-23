@@ -8,6 +8,8 @@
 #include <QtGlobal>
 #include <QtDebug>
 
+#include "gui_event_dispatcher.h"
+
 namespace qtsdl {
 
 std::weak_ptr<GuiApplicationImpl> GuiApplicationImpl::instance;
@@ -40,8 +42,7 @@ GuiApplicationImpl::GuiApplicationImpl()
 #ifndef NDEBUG
 	owner{std::this_thread::get_id()},
 #endif
-	event_dispatcher{},
-	app{(QCoreApplication::setEventDispatcher(&this->event_dispatcher), argc), &argv}
+	app{(QCoreApplication::setEventDispatcher(new EventDispatcher), argc), &argv}
 {
 	// Set locale back to POSIX for the decimal point parsing (see qcoreapplication.html#locale-settings).
 	std::locale::global(std::locale().combine<std::numpunct<char>>(std::locale::classic()));

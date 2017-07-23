@@ -24,12 +24,14 @@ list(APPEND QT_SDL_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_ctx_setup.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_dedicated_thread.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_engine_impl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_event_dispatcher.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_event_queue_impl.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_image_provider_impl.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_input_impl.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_renderer_impl.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_rendering_setup_routines.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_subtree_impl.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/private/gui_timer_info.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/private/opengl_debug_logger.cpp
 )
 

@@ -4,12 +4,15 @@
 
 #include <atomic>
 #include <vector>
+#include <unordered_map>
 
 #include <QAbstractEventDispatcher>
 
 namespace qtsdl {
 
 class EventDispatcher : public QAbstractEventDispatcher {
+	Q_OBJECT
+
 public:
 	explicit EventDispatcher(QObject *parent = nullptr);
 
@@ -31,7 +34,8 @@ public:
 	virtual bool hasPendingEvents() override;
 
 private:
-	QList<TimerInfo> timer_infos;
+	std::vector<QSocketNotifier*> socket_notifiers;
+//	std::unordered_map<QObject, QList<TimerInfo>> timer_infos;
 	std::atomic_bool interrupted;
 };
 
